@@ -1,0 +1,31 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+const_floor_travel_time = 10
+start = 12
+
+floors = [12,2,9,1,32]
+floors_2 = [12,1,2,3,4,'horse']
+
+
+def elevator_basic(floors):
+  
+  try:np.array(floors).astype(int)
+  except: return "One or more floors is not an integer, unable to compute distance."
+   
+  total_time = 0
+
+  for i in range(len(floors)-1):
+    distance_i = abs(floors[i]-floors[i+1])*const_floor_travel_time
+    total_time = total_time + distance_i
+
+  
+  return total_time,floors
+
+  
+output_1 = elevator_basic(floors)
+output_2 = elevator_basic(floors_2)
+
+print(output_1)
+print(output_2)
