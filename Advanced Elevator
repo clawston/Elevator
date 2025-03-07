@@ -1,0 +1,76 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.spatial import distance
+import random
+import time
+
+const_floor_travel_time = 10
+const_down_travel_time = 8
+
+start = 12
+
+
+floors = [2,9,1,32]
+floors_2 = [1,2,3,4,'horse']
+
+def elevator_advanced(start, floors, plot, optimize=False):
+
+  distances = []
+  all_floors = []
+  distances.append(0)
+  all_floors.append(start)
+  for i in  floors:
+    try:int(i)
+    except:
+        return "One or more floors is not an integer, unable to compute distance."
+    all_floors.append(i)
+
+  def calc_floor_time(start_floor, end_floor):
+    if start_floor > end_floor:
+     return abs(start_floor-end_floor)*const_down_travel_time
+    elif start_floor < end_floor:
+     return abs(start_floor-end_floor)*const_floor_travel_time
+    else: 
+     return 0
+  
+  if optimize == False:
+    for i in range(len(all_floors)-1):
+      start_floor = all_floors[i]
+      end_floor = all_floors[i+1]
+      distance_i = calc_floor_time(start_floor, end_floor)
+      distances.append(distance_i+distances[i]) 
+      floors_visited = all_floors
+  else:
+    floors = np.array(floors)
+    floors_visited = []
+    floors_visited.append(start)
+    distances = [0]
+
+    while len(floors)>1:
+      floors_distance = abs(floors_visited[-1]-(floors))
+      closest_floor = floors[np.argmin(floors_distance)]
+      floors_visited.append(closest_floor)
+      distances.append(calc_floor_time(floors_visited[-2],closest_floor))
+      floors = np.delete(floors,np.argmin(floors_distance))
+    floors_visited.append(floors[0])
+    distances.append(calc_floor_time(floors_visited[-2],floors[0]))
+    distances = np.cumsum(distances)
+
+
+  if np.random.rand() > 0.95:
+    print("Oh no! Elevator is broken!")
+    time.sleep(10)
+
+  total_distance = distances[-1]
+  if plot==True:
+    plt.scatter(distances,floors_visited)
+    plt.plot(distances,floors_visited)
+    plt.title("Floor vs. Time")
+    plt.xlabel("Time")
+    plt.ylabel("Floor")
+    plt.show()
+  return total_distance,floors_visited
+
+print(elevator_advanced(start,floors,plot=True,optimize=False))
+print(elevator_advanced(start,floors,plot=True,optimize=True))
