@@ -1,1 +1,70 @@
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.spatial import distance
+import random
+import time
+from sklearn.cluster import KMeans
+from mpl_toolkits.mplot3d import Axes3D
+
+x_mean_all = 0
+x_sd_all = 10
+
+y_mean_all = 0
+y_sd_all = 10
+
+random.seed(0)
+
+x_cluster_1a_all = [random.normalvariate(x_mean_all - 5*x_sd_all, x_sd_all) for i in range(100)]
+x_cluster_1b_all = [random.normalvariate(x_mean_all - 5*x_sd_all, x_sd_all) for i in range(100)]
+x_cluster_1c_all = [random.normalvariate(x_mean_all + 5*x_sd_all, x_sd_all) for i in range(100)]
+x_cluster_1d_all = [random.normalvariate(x_mean_all + 5*x_sd_all, x_sd_all) for i in range(100)]
+
+y_cluster_1a_all = [random.normalvariate(y_mean_all - 5*y_sd_all, y_sd_all) for i in range(100)]
+y_cluster_1b_all = [random.normalvariate(y_mean_all + 5*y_sd_all, y_sd_all) for i in range(100)]
+y_cluster_1c_all = [random.normalvariate(y_mean_all - 5*y_sd_all, y_sd_all) for i in range(100)]
+y_cluster_1d_all = [random.normalvariate(y_mean_all + 5*y_sd_all, y_sd_all) for i in range(100)]
+
+
+x_final = np.concatenate((x_cluster_1a_all,x_cluster_1b_all,x_cluster_1c_all,x_cluster_1d_all))
+y_final = np.concatenate((y_cluster_1a_all,y_cluster_1b_all,y_cluster_1c_all,y_cluster_1d_all))
+z_final = [random.normalvariate(0, y_sd_all) for i in range(400)]
+
+
+data_matrix = np.array([x_final,y_final,z_final]).T
+
+
+
+x_cluster_1a_all[0] = 0
+y_cluster_1a_all[0] = 0
+z_final[0] = 0
+z_cluster_1a_all = z_final[0:100]
+
+x_cluster_1b_all[0] = 0
+y_cluster_1b_all[0] = 0
+z_final[0] = 0
+z_cluster_1b_all = z_final[0:100]
+
+x_cluster_1c_all[0] = 0
+y_cluster_1c_all[0] = 0
+z_final[0] = 0
+z_cluster_1c_all = z_final[0:100]
+
+x_cluster_1d_all[0] = 0
+y_cluster_1d_all[0] = 0
+z_final[0] = 0
+z_cluster_1d_all = z_final[0:100]
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot(x_cluster_1a_all, y_cluster_1a_all, z_cluster_1a_all,color='r')
+ax.plot(x_cluster_1b_all, y_cluster_1b_all, z_cluster_1b_all,color='g')
+ax.plot(x_cluster_1c_all, y_cluster_1c_all, z_cluster_1c_all,color='y')
+ax.plot(x_cluster_1d_all, y_cluster_1d_all, z_cluster_1d_all,color='b')
+
+
+ax.set_xlabel('X Floor')
+ax.set_ylabel('Y Floor')
+ax.set_zlabel('Z Floor')
+
+plt.show()
